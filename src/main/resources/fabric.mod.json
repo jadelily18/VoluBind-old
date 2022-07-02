@@ -1,38 +1,45 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "volubind",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "VoluBind",
+  "description": "Allows creation of keybinds to toggle in-game volume.",
   "authors": [
-    "Me!"
+    "jadelily18"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/jadelily18/VoluBind"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/volubind/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "com.lilydev.volubind.Volubind"
+    ],
+    "client": [
+      "com.lilydev.volubind.VolubindClient"
+    ],
+    "modmenu": [
+      "com.lilydev.volubind.VolubindModMenuApiImpl"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "volubind.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.14.6",
     "fabric": "*",
     "minecraft": "~1.19",
-    "java": ">=17"
+    "java": ">=17",
+    "cloth-config": ">=7.0.69"
   },
   "suggests": {
-    "another-mod": "*"
-  }
+    "modmenu": ">=4.0.0"
+  },
+  "custom": { }
 }

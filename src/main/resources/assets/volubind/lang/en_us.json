@@ -1,0 +1,28 @@
+{
+  "title.volubind.config": "VoluBind Configuration",
+  "category.volubind.general": "General",
+  "key.category.volubind.volubind": "VoluBind",
+  "key.volubind.config": "Open VoluBind Config",
+
+  "key.volubind.masterToggle": "Toggle Master",
+  "key.volubind.musicToggle": "Toggle Music",
+  "key.volubind.recordsToggle": "Toggle Jukebox/Note Blocks",
+  "key.volubind.weatherToggle": "Toggle Weather",
+  "key.volubind.blockToggle": "Toggle Blocks",
+  "key.volubind.hostileToggle": "Toggle Hostile Creatures",
+  "key.volubind.neutralToggle": "Toggle Friendly Creatures",
+  "key.volubind.playersToggle": "Toggle Players",
+  "key.volubind.ambientToggle": "Toggle Ambient/Environment",
+  "key.volubind.voiceToggle": "Toggle Voice/Speech",
+
+  "option.volubind.masterVolToggle": "Master Volume Toggled",
+  "option.volubind.musicVolToggle": "Music Volume Toggled",
+  "option.volubind.recordsVolToggle": "Jukebox/Note Blocks Volume Toggled",
+  "option.volubind.weatherVolToggle": "Weather Volume Toggled",
+  "option.volubind.blockVolToggle": "Block Volume Toggled",
+  "option.volubind.hostileVolToggle": "Hostile Creatures Volume Toggled",
+  "option.volubind.neutralVolToggle": "Friendly Creatures Volume Toggled",
+  "option.volubind.playersVolToggle": "Players Volume Toggled",
+  "option.volubind.ambientVolToggle": "Ambient/Environment Volume Toggled",
+  "option.volubind.voiceVolToggle": "Voice/Speech Volume Toggled"
+}
