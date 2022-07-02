@@ -12,7 +12,7 @@
     "sources": "https://github.com/jadelily18/VoluBind"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
   "icon": "assets/volubind/icon.png",
 
   "environment": "client",
