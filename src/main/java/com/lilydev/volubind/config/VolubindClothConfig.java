@@ -9,9 +9,7 @@ import net.minecraft.text.Text;
 
 public class VolubindClothConfig implements ConfigScreenFactory<Screen> {
 
-    public VolubindClothConfig() {
-
-    }
+    public VolubindClothConfig(){}
 
     @Override
     public Screen create(Screen screen) {
@@ -30,9 +28,6 @@ public class VolubindClothConfig implements ConfigScreenFactory<Screen> {
                         ModConfigs.MASTER_VOL_TOGGLED, 0, 100)
                 .setDefaultValue(0)
                 .setSaveConsumer(newValue -> ModConfigs.MASTER_VOL_TOGGLED = newValue)
-                .setTooltip(Text.literal(
-                        "Toggles master volume to this value when corresponding keybind is pressed."
-                ))
                 .build());
         general.addEntry(entryBuilder.startIntSlider(Text.translatable("option.volubind.musicVolToggle"),
                         ModConfigs.MUSIC_VOL_TOGGLED, 0, 100)
