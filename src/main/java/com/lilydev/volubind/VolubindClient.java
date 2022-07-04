@@ -9,14 +9,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VolubindClient implements ClientModInitializer {
-
-
 
 
     private static final KeyBinding configMenuKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -86,41 +85,6 @@ public class VolubindClient implements ClientModInitializer {
             "key.category.volubind.volubind"
     ));
 
-//    public static void toggleVolume(MinecraftClient client, SoundCategory soundCategory) {
-//        switch (soundCategory.name()) {
-//            case "MASTER": {
-//
-//            }
-//            case "MUSIC": {
-//
-//            }
-//            case "RECORDS": {
-//
-//            }
-//            case "WEATHER": {
-//
-//            }
-//            case "BLOCK": {
-//
-//            }
-//            case "HOSTILE": {
-//
-//            }
-//            case "NEUTRAL": {
-//
-//            }
-//            case "PLAYERS": {
-//
-//            }
-//            case "AMBIENT": {
-//
-//            }
-//            case "VOICE": {
-//
-//            }
-//        }
-//    }
-
     private static void setNormalVolumeConfigOnInit() {
         MinecraftClient client = MinecraftClient.getInstance();
 
@@ -139,18 +103,31 @@ public class VolubindClient implements ClientModInitializer {
         Volubind.LOGGER.info("Normal volume set on client initialization!");
     }
 
+    private static void setGameSoundVolume(MinecraftClient client, SoundCategory soundCategory, int volNormal, int volToggled, boolean isToggled) {
+        String isToggledTxt;
+        if (isToggled) {
+            client.options.setSoundVolume(soundCategory, (float)volNormal / 100);
+            isToggledTxt = "Untoggled";
+        }
+        else {
+            client.options.setSoundVolume(soundCategory, (float)volToggled * 100);
+            isToggledTxt = "Toggled";
+        }
+        int newVol = (int)(client.options.getSoundVolume(soundCategory) * 100);
+        Text overlayText = Text.literal(isToggledTxt + " sound " + soundCategory.name() + ". Set to: " + newVol);
+        client.inGameHud.getChatHud().addMessage(overlayText);
+    }
+
     @Override
     public void onInitializeClient() {
 
         AtomicBoolean normalVolumeSet = new AtomicBoolean(false);
 
-
         ModConfigs.registerConfigs();
 
 
-
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.options != null && !normalVolumeSet.get()) {
+            if (!normalVolumeSet.get()) {
                 setNormalVolumeConfigOnInit();
                 normalVolumeSet.set(true);
             }
@@ -158,134 +135,126 @@ public class VolubindClient implements ClientModInitializer {
                 client.setScreen(new VolubindClothConfig().create(client.currentScreen));
             }
 
+            //*
             // Toggle volume binds.
+            //*
             while (toggleMasterVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.MASTER;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isMasterToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.MASTER_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Master volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.MASTER_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Master volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.MASTER,
+                        ModConfigs.MASTER_VOL_NORMAL,
+                        ModConfigs.MASTER_VOL_TOGGLED,
+                        ModConfigs.isMasterToggled
+                );
                 ModConfigs.isMasterToggled = !ModConfigs.isMasterToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleMusicVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.MUSIC;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isMusicToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.MUSIC_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Music volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.MUSIC_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Music volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.MUSIC,
+                        ModConfigs.MUSIC_VOL_NORMAL,
+                        ModConfigs.MUSIC_VOL_TOGGLED,
+                        ModConfigs.isMusicToggled
+                );
                 ModConfigs.isMusicToggled = !ModConfigs.isMusicToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleRecordsVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.RECORDS;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isRecordsToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.RECORDS_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Jukebox/Note Block volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.RECORDS_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Jukebox/Note Block volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.RECORDS,
+                        ModConfigs.RECORDS_VOL_NORMAL,
+                        ModConfigs.RECORDS_VOL_TOGGLED,
+                        ModConfigs.isRecordsToggled
+                );
                 ModConfigs.isRecordsToggled = !ModConfigs.isRecordsToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleWeatherVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.WEATHER;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isWeatherToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.WEATHER_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Weather volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.WEATHER_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Weather volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.WEATHER,
+                        ModConfigs.WEATHER_VOL_NORMAL,
+                        ModConfigs.WEATHER_VOL_TOGGLED,
+                        ModConfigs.isWeatherToggled
+                );
                 ModConfigs.isWeatherToggled = !ModConfigs.isWeatherToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleBlockVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.BLOCKS;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isBlockToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.BLOCK_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Blocks volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.BLOCK_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Blocks volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.BLOCKS,
+                        ModConfigs.BLOCK_VOL_NORMAL,
+                        ModConfigs.BLOCK_VOL_TOGGLED,
+                        ModConfigs.isBlockToggled
+                );
                 ModConfigs.isBlockToggled = !ModConfigs.isBlockToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleHostileVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.HOSTILE;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isHostileToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.HOSTILE_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Hostile Creatures volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.HOSTILE_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Hostile Creatures volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.HOSTILE,
+                        ModConfigs.HOSTILE_VOL_NORMAL,
+                        ModConfigs.HOSTILE_VOL_TOGGLED,
+                        ModConfigs.isHostileToggled
+                );
                 ModConfigs.isHostileToggled = !ModConfigs.isHostileToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleNeutralVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.NEUTRAL;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isNeutralToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.NEUTRAL_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Neutral Creatures volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.NEUTRAL_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Neutral Creatures volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.NEUTRAL,
+                        ModConfigs.NEUTRAL_VOL_NORMAL,
+                        ModConfigs.NEUTRAL_VOL_TOGGLED,
+                        ModConfigs.isNeutralToggled
+                );
                 ModConfigs.isNeutralToggled = !ModConfigs.isNeutralToggled;
                 ModConfigs.saveConfigs();
             }
             while (togglePlayersVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.PLAYERS;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isPlayersToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.PLAYERS_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Player volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.PLAYERS_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Player volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.PLAYERS,
+                        ModConfigs.PLAYERS_VOL_NORMAL,
+                        ModConfigs.PLAYERS_VOL_TOGGLED,
+                        ModConfigs.isPlayersToggled
+                );
                 ModConfigs.isPlayersToggled = !ModConfigs.isPlayersToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleAmbientVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.AMBIENT;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isAmbientToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.AMBIENT_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Ambient/Environment volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.AMBIENT_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Ambient/Environment volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.AMBIENT,
+                        ModConfigs.AMBIENT_VOL_NORMAL,
+                        ModConfigs.AMBIENT_VOL_TOGGLED,
+                        ModConfigs.isAmbientToggled
+                );
                 ModConfigs.isAmbientToggled = !ModConfigs.isAmbientToggled;
                 ModConfigs.saveConfigs();
             }
             while (toggleVoiceVolume.wasPressed()) {
-                SoundCategory soundCategory = SoundCategory.AMBIENT;
                 ModConfigs.saveConfigs();
-                if (ModConfigs.isVoiceToggled) {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.VOICE_VOL_NORMAL / 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Untoggled Voice/Speech volume!"));
-                } else {
-                    client.options.setSoundVolume(soundCategory, (float)(ModConfigs.VOICE_VOL_TOGGLED * 100));
-                    client.inGameHud.getChatHud().addMessage(Text.literal("Toggled Voice/Speech volume!"));
-                }
+                setGameSoundVolume(
+                        client,
+                        SoundCategory.VOICE,
+                        ModConfigs.VOICE_VOL_NORMAL,
+                        ModConfigs.VOICE_VOL_TOGGLED,
+                        ModConfigs.isVoiceToggled
+                );
                 ModConfigs.isVoiceToggled = !ModConfigs.isVoiceToggled;
                 ModConfigs.saveConfigs();
             }

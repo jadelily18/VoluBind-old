@@ -7,7 +7,6 @@
   ],
   "client": [
     "SliderWidgetAccessor",
-    "SliderWidgetMixin",
     "SoundSliderWidgetMixin"
   ],
   "injectors": {

@@ -1,6 +1,7 @@
 package com.lilydev.volubind.config;
 
 import com.lilydev.volubind.Volubind;
+import com.lilydev.volubind.VolubindClient;
 import com.mojang.datafixers.util.Pair;
 
 public class ModConfigs {
@@ -219,7 +220,7 @@ public class ModConfigs {
         isVoiceToggled = CONFIG.getOrDefault(isVoiceToggledId, false);
         VOICE_VOL_NORMAL = CONFIG.getOrDefault("voice_vol_normal", 100);
         VOICE_VOL_TOGGLED = CONFIG.getOrDefault("voice_vol_toggled", 0);
-
-        SimpleConfig.LOGGER.info("All " + configs.getConfigsList().size() + " have been set properly!");
+        
+        SimpleConfig.LOGGER.info("All " + configs.getConfigsList().size() + " variables have been set properly!");
     }
 }
